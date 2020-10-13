@@ -1,0 +1,48 @@
+how to install and configure mysql 8 on ubuntu.
+
+wget -c https://dev.mysql.com/get/mysql-apt-config_0.8.11-1_all.deb
+
+sudo dpkg -i mysql-apt-config_0.8.11-1_all.deb
+
+sudo apt-get update
+
+sudo apt-get install mysql-server
+
+sudo mysql_secure_installation  // to set the password and to keep anonymous users...(user without password and username)
+
+sudo service mysql start/stop/status
+
+
+service mysql start -> mysql -u root -p -> enter password   [to login as root ]: currently the password is "passmenow" and there is anonymous user access.
+
+
+______________________________________________________________________________________________________________________________________________
+
+How to install Mongodb server/db and compass ?
+
+>> wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+In case there is any error:
+	>> sudo apt-get install gnupg
+	>> wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+create a list file for installation:
+>> echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+
+>> apt-get update   // to update directories
+>> sudo apt-get install -y mongodb-org
+>> sudo systemctl start mongod
+>> sudo systemctl daemon-reload  // if at all mongo doesn't start
+>> sudo systemctl status mongod  // check status
+>> sudo systemctl stop mongod
+>> sudo systemctl restart mongod
+
+To start mongodb:
+>> mongo
+
+
+To start mongo db at startup:
+>> sudo systemctl enable mongod
+
+Download compass to get GUI for the database.
+
+
+
