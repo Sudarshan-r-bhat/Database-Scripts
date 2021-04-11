@@ -1,5 +1,4 @@
 
-
 -- ------------------prob stmt: ------------------------------------------------------
 -- you have a table 'PROJ_TRANSPORT_ATTRIBUTES' WHEN EVER THERE IS AN 
 -- INSERT OR UPDATE event, you need to execute a trigger which populates a table
@@ -9,8 +8,8 @@
 -- hint: for INSERT all columns are affected, and for update store the column name
 -- and if multiple columns are affected, store them in a separate row.
 -- ------------------------------------------------------------------------------------
-
-
+SELECT * FROM AUDITS;
+SELECT * FROM PROJ_TRANSPORT_ATTRIBUTE;
 
 
 -- creating a table called AUDITS to maintain the records of triggering events.
@@ -26,10 +25,20 @@ CREATE TABLE AUDITS (
 	
 );
 
+CREATE TABLE PROJ_TRANSPORT_ATTRIBUTE (
+PTA_ID NUMBER PRIMARY KEY,
+UACE_ID NUMBER, 
+FINAL_HUB_SITE_INFO_ID VARCHAR2(32), 
+TECHNOLOGY_TYPE VARCHAR2(32)
+);
 
+INSERT INTO PROJ_TRANSPORT_ATTRIBUTE
+SELECT  UNION ALL
+SELECT  UNION ALL
+SELECT  UNION ALL
+SELECT  UNION ALL
 
-
-
+;
 -- The below is the header section OF TRIGGER :
 -- [--------------------------------------]
 
