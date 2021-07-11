@@ -1,0 +1,15 @@
+TimeLine of creation:
+
+oracle-admin-setup.sql 
+oracle-central-ddl.sql           
+oracle-central-dml.sql
+query-triggers-practise-0.sql
+indexing_partitioning.sql        
+query_05_may.sql         
+query_13_april_2021.sql
+query_15_may_2021.sql
+query_18_april_2021.sql
+oracle-procedures-functions.sql
+procedure_with_nested_functions.sql
+views_materialized_views.sql
+
