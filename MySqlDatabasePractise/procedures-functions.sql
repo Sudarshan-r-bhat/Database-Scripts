@@ -21,6 +21,8 @@ delimiter ;
 
 CALL fetch_cities_based_on_code('ind', @city_name);
 
+select @city_name;
+
 -- GROUP_CONCAT() FUNCTION:
 SELECT district, group_concat(name) as city_name, count(name) as count FROM city WHERE countrycode = 'afg' group by district;
 

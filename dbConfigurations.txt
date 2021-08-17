@@ -44,5 +44,27 @@ To start mongo db at startup:
 
 Download compass to get GUI for the database.
 
+______________________________________________________________________________________________________________________________________________
+RUNNING MONGO DB COMMANDS AND SCRIPTS FROM CMD:
+
+	$ mongo localhost:27017/testdb --eval "db.movies.find().pretty()";
+	$ mongo --eval "load(..path/script-file.js)"
+	$ mongo --eval "load(ls()[0].slice(2))"
+
+LOGGING THE MONGODB OUTPUT TO AN EXTERNAL FILE:
+	
+	$ mongo localhost:27017/testdb --eval "db.movies.find().pretty()" > OUTPUT.txt
+	$ mongo --eval "load(..path/script-file.js)" > OUTPUT.txt
+	$ mongo --eval "load(ls()[0].slice(2))" > OUTPUT.txt
+
+
+______________________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
 
 

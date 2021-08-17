@@ -1,0 +1,9 @@
+MongoDB shell version v4.4.6
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("a02f0ac4-5a2e-4cec-8222-a77b7eba2938") }
+MongoDB server version: 4.4.6
+uncaught exception: SyntaxError: missing ) after argument list :
+@(shell eval):1:1
+Error: error loading js file: central-query-repo-1.js :
+@(shell eval):1:1
+exiting with code -4
