@@ -1,6 +1,7 @@
 // This file will contain all the QUERY OPERATIONS that will ever be done from 17th August 2021.
 /*
 	TO EXECUTE THIS FILE FROM CMD:
+		$ cd C:\Users\sudar\space-1\GitLabPersonal\databases\MongoDatabasePractise
 		$ mongo --eval "load(ls()[1].slice(2))"
 		
 	TO OUTPUT THE RESULT OF QUERY:
@@ -92,6 +93,9 @@ print(prefix, query);
 printjson(result);
 
 
+
+// ============================ 18 AUGUST 2021
+
 // QUERY TO RETURN SPECIFIC PART/FIELDS OF THE MATCHED OBJECTS.
 print(prefix, 'QUERY TO RETURN SPECIFIC PART/FIELDS OF THE MATCHED OBJECTS.');
 query =  
@@ -99,12 +103,61 @@ query =
 result = 
 	db.movies.find({ "actors.age": {$all : [34, 36]} }, {actors: 1}).toArray();
 print(prefix, query);
+printjson(result); 
+
+
+
+// QUERY TO CHECK THE FIELD TO BE null , IF KEYS EXISTS
+print(prefix, 'QUERY TO CHECK THE FIELD TO BE null , IF OR KEYS EXISTS');
+query = 
+	db.movies.find({actors: {$exists: false}});
+result = 
+	db.movies.find({actors: {$exists: false}}).toArray();
+print(prefix, query);
+printjson(result);
+
+
+query = 
+	db.movies.find({actors: {$type: 10}});
+result = 
+	db.movies.find({actors: {$type: 10}}).toArray();
+print(prefix, query);
 printjson(result);
 
 
 
-/*
 
+
+// TO GET THE CURSOR ON THE ARRAY.
+// type: 1, 2, 3, 4, 5, 6, .... == double, string, object, arrary, binData, undefined, objectId, bool, date, 10 = null, 
+
+query = 
+	db.movies.find({actors: {$exists: true, $type: 3}});
+var myCursor = 
+	db.movies.find({actors: {$exists: true, $type: 3}});
+print(prefix, query);
+while(myCursor.hasNext()) {
+	print( tojson(myCursor.next()) );
+}
+// myCursor.forEach(x => print( tojson(x) ) );
+
+// 
+print(prefix, 'UPDATE QUERY TO ADD A NEW FIELD \'LAST-MODIFIED-DATE\' ');
+query = 
+	db.movies.updateMany({}, {$currentDate: {lastModified: true}});
+result = 
+	db.movies.updateMany({}, {$currentDate: {lastModified: true}});
+print(prefix, query);
+printjson(result);
+
+
+
+		
+		
+		
+
+
+/*
 */
 
 
