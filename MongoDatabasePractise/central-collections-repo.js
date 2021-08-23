@@ -65,7 +65,8 @@ db.movies.insertMany([
 	title: 'black widow',
 	ratings: 6.8,
 	generes: ['action', 'drama', 'comedy', 'adventure'],
-	releaseYear: 2021
+	releaseYear: 2021,
+	actors: { "scarlett johansson": {age: 32, origin: "english"}}
 },
 {
 	title: 'thor',
@@ -105,6 +106,40 @@ db.movies.insertOne({
 
 
 
+db.testCollection.drop();
+
+db.testCollection.insertMany(
+[
+	{
+			"_id" : ObjectId("611d264c8ba302f129ee5d8a"),
+			"sum" : 0,
+			"avg" : 0,
+			"numbers" : [
+					1,
+					2,
+					3
+			],
+			"lastModified" : ISODate("2021-08-19T06:31:43.090Z"),
+			"size" : "less than 3",
+			"mapped" : [
+					101,
+					102,
+					103
+			]
+	},
+	{
+			"_id" : ObjectId("611f7f0781e443a4b46db309"),
+			"numbers" : [
+					45,
+					343,
+					32,
+					112
+			]
+	}
+
+]
+
+);
 
 
 
