@@ -1,13 +1,16 @@
 // This file will contain all the QUERY OPERATIONS that will ever be done from 17th August 2021.
 /*
 	TO EXECUTE THIS FILE FROM CMD:
+		$ C:\Users\sudar\space-1\GitLabPersonal\databases\MongoDatabasePractise
 		$ mongo --eval "load(ls()[2].slice(2))"
 		
 	TO OUTPUT THE RESULT OF QUERY:
 		. convert the result to array and store it in a variable.
 		. use printjson() function to log the result.
 	TO RUN SCRIPT FROM WITHIN THE MONGOSHELL:
-		$ load(ls()[1].slice(2));
+		
+		$ cd('C:/Users/sudar/space-1/GitLabPersonal/databases/MongoDatabasePractise/')
+		$ load(ls()[2].slice(2));
 		
 	note: the way you query the embeded object and array are the same.
 	
@@ -15,7 +18,7 @@
 		
 */
 
-const prefix='[ log ]';
+const prefix='\r\n[ log ]';
 var result = [];
 var query = '';
 
@@ -34,18 +37,6 @@ print();
 // AGGREGATION METHODS.
 
 
-
-query = 
-	db.testCollection.aggregate([
-		{$unwind: "$numbers"},
-		{
-			$group: {
-				_id: "$_id",
-				avg: {$avg: "$numbers"}
-			} 
-		}	
-	]);
-
 result = 
 	db.testCollection.aggregate([
 			{$unwind: "$numbers"},
@@ -57,7 +48,6 @@ result =
 		}	
 	]).toArray();
 	
-print(prefix, query);
 printjson(result);
 
 
@@ -80,24 +70,12 @@ query =
 		{$set: {lastModified: "$$NOW"}}
 	]);
 
-print(prefix, tojson(query));
+// print(prefix, tojson(query));
 
 
 // SWITCH STATEMENT IN UPDATE QUERY
 print(prefix, 'SWITCH STATEMENT IN UPDATE QUERY');
-query = 
-	db.testCollection.updateMany(
-		{}, 
-		[
-			{ $set: { size: { $switch: { 
-				branches: [
-				{case: {$gte: [10, {s: {$size: "$numbers"}}]}, then: "more than 10" }, 
-				{case: {$gte: [6, {s: {$size: "$numbers"}}]}, then: "more than six"},
-				{case: {$gte: [3, {s: {$size: "$numbers"}}]}, then: "more than 3"}
-			], 
-				default: "less than 3"
-			}} }}
-	]);
+
 result = 
 db.testCollection.aggregate(
 		[ {
@@ -114,7 +92,7 @@ db.testCollection.aggregate(
 			size2: {$size: "$numbers"}}
 			}
 		]).toArray();
-print(prefix, tojson(query));
+// print(prefix, tojson(query));
 printjson(result);
 		
 		
@@ -131,16 +109,6 @@ db.testCollection.aggregate([
 
 
 // QUERY TO COMPARE THE SIZE OF AN ARRAY.
-query =
-	db.testCollection.aggregate([
-	{
-		$project: {
-			status: {
-				$gte : [  {$size: "$numbers"}, 3  ]
-			}
-		}
-	}
-	]);
 result =
 	db.testCollection.aggregate([
 	{
@@ -151,26 +119,11 @@ result =
 		}
 	}
 	]).toArray();
-print(prefix, query);
+// print(prefix, query);
 print(result);
 
 
 // QUERY TO TRANSFORM THE DOCUMENT. USING $addFields, $map : input: as: in
-query =
-	db.testCollection.updateMany({}, [
-		{
-			$addFields: {
-				"mapped": {
-					$map: {
-						input: "$numbers",
-						as: "numbers",
-						in: { $add: ["$$numbers", 100] }
-					}
-				}
-			}
-		}
-	]);
-
 result =
 	db.testCollection.updateMany({}, [
 		{
@@ -185,26 +138,188 @@ result =
 			}
 		}
 	]);
-	
-	
-// QUERY TO GROUP ALL THE MOVIES NAMES.
-db.movies.aggregate([
-	{
+// print(prefix, query);
+print(prefix, tojson(result));
+
+
+
+// ================ 20 AUG 2021
+
+// QUERY TO FETCH THE STATES WITH POPULATION > 10 MILLION FROM 'zips' collection
+// first stage groups the state by aggregating the documents, second stage filters based 
+// on the population.
+result = 
+	db.zips.aggregate(
+	[
+	{ 
 		$group: {
-			movies: {$concat: "$title"}
+			_id: "$state", 
+			totalPopulation: { $sum: "$pop" } 
+		}
+	},
+	{
+		$match: {
+			totalPopulation: { $gte: 10*1000*1000}
 		}
 	}
-]);
+	]
+	).toArray();
+// print(prefix, query);
+print(prefix, tojson(result));
+
+
+
+print(prefix, 'QUERY TO CALCULATE THE AVG CITY POPULATION OF EACH STATE.');
+result = 
+db.zips.aggregate(
+[
+	{
+		$group: {
+			_id: { state: "$state", city: "$city"},
+			pop: { $sum: "$pop" } 
+		}
+	},
+	{
+		$sort: { "_id.state": 1}
+	},
+	{
+		$group: {
+			_id: "$_id.state",
+			averageCityPopulation: {$avg: "$pop"}
+		}
+	}
+]
+).toArray();
+// print(prefix, query);
+print(prefix, tojson(result));
 
 
 
 
+// QUERY TO CALCULATE THE AVG CITY POPULATION OF all the STATE.
+print(prefix, 'QUERY TO CALCULATE THE AVG CITY POPULATION OF all the STATE');
+result = 
+db.zips.aggregate(
+[
+	{
+		$group: {
+			_id: { state: "$state", city: "$city"},
+			pop: { $sum: "$pop" } 
+		}
+	},
+	{
+		$sort: { "_id.state": 1}
+	},
+	{
+		$group: {
+			_id: "All states",
+			averageCityPopulation: {$avg: "$pop"}
+		}
+	}
+]
+).toArray();
+// print(prefix, query);
+print(prefix, tojson(result));
+
+
+
+// $merge stage in aggregation pipeline.
+
+// TODO:
+
+
+
+// MAP-REDUCE TO AGGREGATION PIPELINE.
+// QUERY TO GET THE LIST OF ALL MOVIE TITLES.
+print(prefix, ' QUERY TO GET THE LIST OF ALL MOVIE TITLES.');
+result = 
+db.movies.aggregate(
+[
+	{
+		$project: {
+			_id: "$_id",
+			title: "$title"
+		}
+	},
+	{
+		$group: {
+			_id: 0,
+			allTitles: {
+				$accumulator: {
+					init: function() {
+						return '';
+					},
+					initArgs: [],
+					accumulate: function(state, value) {
+						return value + ', ' + state;
+					},
+					accumulateArgs: ["$title"],
+					merge: function(state1, state2) {
+						return state1 + state2;
+					},
+					lang: "js"
+				}
+			}
+		}
+	}
+]
+).toArray();
+// print(prefix, query);
+print(prefix, tojson(result));
+
+
+// QUERY TO GET A LIST OF ALL DISTINCT STATE IN ZIPS COLLECTION AS A SINGLE DOCUMENT.
+result =
+db.zips.aggregate(
+[
+	{
+		$group: {
+			_id: "$state"
+		}
+	},
+	{
+		$group: {
+			_id: 0,
+			"allStates": {
+				$accumulator: {
+					init: function() {
+						return '';
+					},
+					initArgs: [],
+					accumulate:function(state, value) {
+						print('accumulating data' + state + ', ' + value);
+						return value + ', ' + state;
+					},
+					accumulateArgs: ["$_id"],
+					merge: function(state1, state2) {
+						return state1 + state2;
+					},
+					lang: "js"
+				}
+			}
+		}
+	}
+]
+).toArray();
+print(prefix, result);
+
+
+/*
 
 
 
 	
-print(prefix, tojson(query));
-print(prefix, tojson(result));
+*/
+
+
+
+
+
+
+
+
+
+
 
 
 
