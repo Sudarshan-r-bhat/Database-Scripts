@@ -185,6 +185,24 @@ result =
 			}
 		}
 	]);
+	
+	
+// QUERY TO GROUP ALL THE MOVIES NAMES.
+db.movies.aggregate([
+	{
+		$group: {
+			movies: {$concat: "$title"}
+		}
+	}
+]);
+
+
+
+
+
+
+
+	
 print(prefix, tojson(query));
 print(prefix, tojson(result));
 
